@@ -1,25 +1,25 @@
-insert into person(city,COUNT(*)) values('Berlin','29');
-insert into person(city,COUNT(*)) values('Cairo','27');
-insert into person(city,COUNT(*)) values('Stockholm','27');
-insert into person(city,COUNT(*)) values('Barcelona','25');
-insert into person(city,COUNT(*)) values('Hanoi','24');
-insert into person(city,COUNT(*)) values('Mexico city','23');
-insert into person(city,COUNT(*)) values('Bangkok','22');
-insert into person(city,COUNT(*)) values('Helsinki','22');
-insert into person(city,COUNT(*)) values('Madrid','22');
-insert into person(city,COUNT(*)) values('Paris','22');
-insert into person(city,COUNT(*)) values('Toronto','21');
-insert into person(city,COUNT(*)) values('Amsterdam','21');
-insert into person(city,COUNT(*)) values('New York','21');
-insert into person(city,COUNT(*)) values('Moscow','20');
-insert into person(city,COUNT(*)) values('Tokyo','20');
-insert into person(city,COUNT(*)) values('Shanghai','20');
-insert into person(city,COUNT(*)) values('Jerusalem','20');
-insert into person(city,COUNT(*)) values('Nairobi','19');
-insert into person(city,COUNT(*)) values('Bejing','18');
-insert into person(city,COUNT(*)) values('London','18');
-insert into person(city,COUNT(*)) values('San Francisco','18');
-insert into person(city,COUNT(*)) values('Saigon','16');
-insert into person(city,COUNT(*)) values('Hue','15');
-insert into person(city,COUNT(*)) values('Sandiego','15');
-insert into person(city,COUNT(*)) values('Boston','14');
+/*Tất cả những nam giới tuổi dưới 45*/
+SELECT * FROM person 
+WHERE gender = 'Male' 
+AND DATE_FORMAT(FROM_DAYS(DATEDIFF(now(),birthdate)), '%Y')+0 < 45;
+
+/*Tất cả những nữ giới làm nghề lái xe 'driver'*/
+SELECT * FROM person 
+WHERE gender = 'Female' 
+AND job = 'driver';
+
+/*Tỷ lệ nam/nữ lập trình viên trong tất cả tập dữ liệu*/
+SELECT t.job, m.malecount/(t.total - m.malecount) FROM 
+(SELECT job, COUNT(*) AS total 
+FROM person 
+WHERE job = 'developer') AS t 
+JOIN 
+(SELECT job, COUNT(*) AS malecount 
+FROM person WHERE gender = 'Male' AND job = 'developer') AS m ON t.job = m.job;
+
+/*5 thành phố có số lượng nữ lớn nhất*/
+SELECT city, COUNT(*) 
+FROM person WHERE gender = 'Female'
+GROUP BY city
+ORDER BY COUNT(*) DESC 
+LIMIT 5
